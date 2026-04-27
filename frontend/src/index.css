@@ -1,0 +1,166 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap");
+
+:root {
+  --bg-base: #f8f3eb;
+  --bg-soft: #f0e8db;
+  --text-main: #2f2a24;
+  --text-muted: #675f54;
+  --line: rgba(112, 98, 79, 0.24);
+  --line-strong: rgba(112, 98, 79, 0.35);
+  --glass: rgba(255, 255, 255, 0.62);
+  --glass-heavy: rgba(255, 255, 255, 0.78);
+  --accent: #6c9c75;
+  --accent-strong: #5c8765;
+  --danger: #ff8ca5;
+  --shadow: 0 14px 32px rgba(82, 65, 43, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 10% 8%, #f5d8bb 0%, transparent 34%),
+    radial-gradient(circle at 87% 18%, #d8e8cf 0%, transparent 33%),
+    radial-gradient(circle at 40% 92%, #f1e5c7 0%, transparent 38%),
+    linear-gradient(128deg, #fdf9f2 0%, #f5efe3 46%, #ece4d7 100%);
+  background-attachment: fixed;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(10px);
+  z-index: -1;
+}
+
+body::before {
+  width: 320px;
+  height: 320px;
+  background: rgba(194, 223, 185, 0.4);
+  top: -100px;
+  right: 8%;
+}
+
+body::after {
+  width: 260px;
+  height: 260px;
+  background: rgba(248, 213, 183, 0.45);
+  bottom: -80px;
+  left: 6%;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Sora", "Manrope", sans-serif;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text-main);
+  border-radius: 12px;
+  padding: 11px 13px;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(122, 113, 98, 0.8);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+button {
+  border: 1px solid rgba(92, 135, 101, 0.25);
+  border-radius: 12px;
+  padding: 11px 16px;
+  color: #fff;
+  background: linear-gradient(140deg, var(--accent) 0%, var(--accent-strong) 100%);
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(108, 156, 117, 0.28);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.glass-panel {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.48));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+@media (max-width: 768px) {
+  body::before {
+    width: 210px;
+    height: 210px;
+    right: -40px;
+  }
+
+  body::after {
+    width: 180px;
+    height: 180px;
+    left: -30px;
+  }
+}

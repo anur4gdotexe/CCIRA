@@ -1,0 +1,106 @@
+.complaint-card {
+  border: 1px solid rgba(108, 92, 70, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.56));
+  box-shadow: 0 8px 22px rgba(95, 76, 54, 0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.complaint-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.complaint-card-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2f2a24;
+}
+
+.status-chip {
+  text-transform: capitalize;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.status-pending {
+  background: rgba(255, 205, 117, 0.25);
+  color: #845827;
+  border-color: rgba(199, 142, 71, 0.36);
+}
+
+.status-assigned {
+  background: rgba(179, 208, 167, 0.32);
+  color: #33583d;
+  border-color: rgba(111, 153, 106, 0.35);
+}
+
+.status-in-progress {
+  background: rgba(245, 215, 173, 0.3);
+  color: #7a5430;
+  border-color: rgba(185, 136, 91, 0.34);
+}
+
+.status-resolved {
+  background: rgba(156, 197, 163, 0.32);
+  color: #2f5936;
+  border-color: rgba(95, 140, 101, 0.35);
+}
+
+.complaint-description {
+  margin: 12px 0 16px;
+  color: #5f594d;
+  line-height: 1.5;
+}
+
+.complaint-image {
+  width: min(100%, 360px);
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(108, 92, 70, 0.2);
+  margin: 2px 0 16px;
+  display: block;
+}
+
+.complaint-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.complaint-grid > div {
+  border: 1px solid rgba(108, 92, 70, 0.18);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.66);
+  padding: 9px 10px;
+}
+
+.complaint-grid label {
+  display: block;
+  font-size: 11px;
+  color: #7d715f;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.complaint-grid p {
+  margin: 0;
+  color: #312c25;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .complaint-grid {
+    grid-template-columns: 1fr;
+  }
+}

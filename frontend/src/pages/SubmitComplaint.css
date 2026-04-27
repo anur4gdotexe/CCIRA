@@ -1,0 +1,188 @@
+.submit-page {
+  padding: 8px 20px 26px;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 92px);
+}
+
+.submit-card {
+  width: min(1040px, 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(108, 92, 70, 0.22);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.62));
+  box-shadow: 0 12px 28px rgba(96, 76, 54, 0.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  padding: 30px;
+}
+
+.submit-title {
+  font-size: clamp(24px, 3.2vw, 38px);
+  margin-bottom: 10px;
+}
+
+.submit-intro {
+  margin-bottom: 18px;
+  color: #5e574c;
+}
+
+.submit-alert {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  border: 1px solid transparent;
+}
+
+.submit-alert-error {
+  background: rgba(255, 140, 165, 0.12);
+  color: #ffd4de;
+  border-color: rgba(255, 140, 165, 0.5);
+}
+
+.submit-alert-success {
+  background: rgba(115, 243, 200, 0.14);
+  color: #2b6240;
+  border-color: rgba(115, 243, 200, 0.45);
+}
+
+.submit-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+  gap: 16px;
+}
+
+.left-form,
+.right-form {
+  border: 1px solid rgba(108, 92, 70, 0.18);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.66);
+  padding: 16px;
+}
+
+.form-block-title {
+  font-family: "Sora", sans-serif;
+  font-size: 15px;
+  color: #3c3429;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(108, 92, 70, 0.16);
+}
+
+.submit-card label {
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 10px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #746857;
+}
+
+.submit-card textarea {
+  min-height: 190px;
+  resize: vertical;
+}
+
+.form-help-text {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6f6454;
+}
+
+.upload-box {
+  border: 1px dashed rgba(108, 92, 70, 0.32);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 22px;
+  text-align: center;
+  border-radius: 12px;
+  margin-top: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60584d;
+}
+
+.upload-box input {
+  display: none;
+}
+
+.example-images {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.example-images img {
+  width: 100%;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(108, 92, 70, 0.18);
+}
+
+.detect-btn {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.map-box {
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(108, 92, 70, 0.22);
+}
+
+.coords-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.coords-grid label {
+  margin-top: 12px;
+}
+
+.submit-note {
+  margin-top: 20px;
+  margin-bottom: 0;
+  color: #5e5549;
+  font-weight: 600;
+}
+
+.submit-btn {
+  margin-top: 16px;
+  width: 100%;
+  font-size: 17px;
+}
+
+.submit-btn:disabled,
+.detect-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 940px) {
+  .submit-page {
+    padding: 8px 12px 16px;
+  }
+
+  .submit-card {
+    padding: 18px;
+  }
+
+  .submit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .submit-card textarea {
+    min-height: 220px;
+  }
+
+  .coords-grid {
+    grid-template-columns: 1fr;
+  }
+}

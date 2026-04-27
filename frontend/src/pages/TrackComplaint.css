@@ -1,0 +1,76 @@
+.track-page {
+  padding: 8px 20px 30px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.track-header-card {
+  border: 1px solid rgba(108, 92, 70, 0.2);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 16px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.6));
+  box-shadow: 0 10px 24px rgba(96, 76, 54, 0.16);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.track-header-card h1 {
+  margin: 0;
+  color: #2f2a24;
+  font-size: clamp(26px, 3.4vw, 40px);
+}
+
+.track-header-card p {
+  margin: 8px 0 0;
+  color: #625b50;
+}
+
+.track-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.track-toolbar input {
+  flex: 1;
+}
+
+.track-message {
+  border: 1px dashed rgba(108, 92, 70, 0.28);
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  color: #5e574d;
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.track-message p {
+  margin: 0;
+}
+
+.track-message button {
+  margin-top: 12px;
+}
+
+.track-error {
+  border-style: solid;
+  border-color: rgba(255, 140, 165, 0.5);
+  background: rgba(255, 140, 165, 0.1);
+  color: #8d2f4b;
+}
+
+.track-list {
+  display: grid;
+  gap: 12px;
+}
+
+@media (max-width: 700px) {
+  .track-page {
+    padding: 8px 12px 18px;
+  }
+
+  .track-toolbar {
+    flex-direction: column;
+  }
+}
