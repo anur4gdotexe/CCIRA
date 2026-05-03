@@ -22,7 +22,7 @@ export default function Home() {
                 Citizen-first complaint management</p>
               <h1>Raise city issues. Track action. Build trust.</h1>
               <p>
-                CivicVoice helps residents and civic authorities collaborate with
+                CCIRA helps residents and civic authorities collaborate with
                 clarity, transparency, and measurable accountability.
               </p>
 

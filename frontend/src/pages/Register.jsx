@@ -112,9 +112,9 @@ const Register = () => {
 
         <div className="left-content">
 
-          <div className="brand">● CivicVoice</div>
+          <div className="brand">● CCIRA</div>
 
-          <h1>Join CivicVoice today</h1>
+          <h1>Join CCIRA today</h1>
 
           <p>
             Create an account to submit and track civic complaints easily.

@@ -4,6 +4,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection = "complaints")
 public class Complaint {
     @Id
@@ -26,6 +29,9 @@ public class Complaint {
 
     @Field("status")
     private String status;
+
+    @Field("status_history")
+    private List<StatusEvent> statusHistory = new ArrayList<>();
 
     @Field("lat")
     private double lat;
@@ -134,5 +140,13 @@ public class Complaint {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<StatusEvent> getStatusHistory() {
+        return statusHistory;
+    }
+
+    public void setStatusHistory(List<StatusEvent> statusHistory) {
+        this.statusHistory = statusHistory;
     }
 }

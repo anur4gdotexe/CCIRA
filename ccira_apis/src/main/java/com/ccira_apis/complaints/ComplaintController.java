@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -49,8 +50,26 @@ public class ComplaintController {
     }
 
     @PatchMapping("/admins/{id}/status")
-    ResponseEntity<Complaint> updateStatus(@PathVariable("id") String complaintId) {
-        return ResponseEntity.status(201)
-                .body(complaintService.updateComplaintStatus(complaintId));
+    ResponseEntity<?> updateStatus(
+            @PathVariable("id") String complaintId,
+            @RequestBody Map<String, String> body) {
+
+        String status = body.get("status");
+
+        if (status == null || status.isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "status field is required"));
+        }
+
+        try {
+            Complaint updated = complaintService.updateComplaintStatus(complaintId, status.toUpperCase());
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404)
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 }

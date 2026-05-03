@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
 @Service
 public class ComplaintService {
+    private static final Set<String> VALID_STATUSES = Set.of("SUBMITTED", "ACCEPTED", "DECLINED", "RESOLVED");
+
     private final ComplaintRepository complaintRepository;
     private final LocationAdminService locationAdminService;
     private final ComplaintUserRepository complaintUserRepository;
@@ -53,6 +57,8 @@ public class ComplaintService {
 
         String complaintId = complaintsCounterService.generateComplaintId();
 
+        String now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).toString();
+
         Complaint newComplaint = new Complaint();
         newComplaint.setComplaintId(complaintId);
         newComplaint.setDescription(complaintSubmissionDTO.getDescription());
@@ -60,10 +66,14 @@ public class ComplaintService {
         newComplaint.setLat(complaintSubmissionDTO.getLat());
         newComplaint.setLon(complaintSubmissionDTO.getLon());
         newComplaint.setImgSrc(complaintSubmissionDTO.getImage());
-        newComplaint.setStatus("PENDING");
-        newComplaint.setCreatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).toString());
+        newComplaint.setStatus("SUBMITTED");
+        newComplaint.setCreatedAt(now);
         newComplaint.setName(complaintSubmissionDTO.getName());
         newComplaint.setPhone(complaintSubmissionDTO.getPhone());
+
+        List<StatusEvent> history = new ArrayList<>();
+        history.add(new StatusEvent("SUBMITTED", now));
+        newComplaint.setStatusHistory(history);
 
         String userId = (String) SecurityContextHolder
                 .getContext()
@@ -121,11 +131,27 @@ public class ComplaintService {
                 .toList();
     }
 
-    public Complaint updateComplaintStatus(String complaintId) {
-        Complaint complaint = complaintRepository.findById(complaintId).get();
+    public Complaint updateComplaintStatus(String complaintId, String newStatus) {
+        if (!VALID_STATUSES.contains(newStatus)) {
+            throw new IllegalArgumentException("Invalid status: " + newStatus +
+                    ". Must be one of: SUBMITTED, ACCEPTED, DECLINED, RESOLVED");
+        }
 
-        complaint.setStatus("RESOLVED");
-        complaint.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).toString());
+        Complaint complaint = complaintRepository.findById(complaintId)
+                .orElseThrow(() -> new RuntimeException("Complaint not found: " + complaintId));
+
+        String now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).toString();
+
+        complaint.setStatus(newStatus);
+        complaint.setUpdatedAt(now);
+
+        List<StatusEvent> history = complaint.getStatusHistory();
+        if (history == null) {
+            history = new ArrayList<>();
+        }
+        history.add(new StatusEvent(newStatus, now));
+        complaint.setStatusHistory(history);
+
         complaintRepository.save(complaint);
 
         return complaint;

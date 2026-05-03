@@ -62,7 +62,7 @@ const Login = () => {
 
   <div className="left-content">
 
-    <div className="brand">● CivicVoice</div>
+    <div className="brand">● CCIRA</div>
 
     <h1>Manage civic complaints easily</h1>
 
@@ -88,7 +88,7 @@ const Login = () => {
 
           <form onSubmit={handleLogin}>
 
-            <label>userId</label>
+            <label>User ID</label>
 
             <input
               type="userId"
