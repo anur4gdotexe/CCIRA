@@ -2,6 +2,7 @@ package utils.auth;
 
 import com.ccira_apis.admin_bodies.AdminBodyRepository;
 import com.ccira_apis.users.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,18 +29,22 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDTO request){
-        String password = "";
+    public ResponseEntity<String> login(@RequestBody LoginDTO request) {
+        if (request.getUserId() == null || request.getUserId().isBlank() ||
+            request.getPassword() == null || request.getPassword().isBlank()) {
+            throw new IllegalArgumentException("User ID and password are required");
+        }
+
+        String password;
         List<String> roles;
+
         if (adminBodyRepository.existsById(request.getUserId())) {
             password = adminBodyRepository.findById(request.getUserId()).get().getPassword();
             roles = List.of("ROLE_ADMIN");
-        }
-        else if (userRepository.existsById(request.getUserId())) {
+        } else if (userRepository.existsById(request.getUserId())) {
             password = userRepository.findById(request.getUserId()).get().getPassword();
             roles = List.of("ROLE_USER");
-        }
-        else {
+        } else {
             throw new RuntimeException("No user found");
         }
 
@@ -47,6 +52,6 @@ public class AuthController {
             throw new RuntimeException("Invalid credentials");
         }
 
-        return jwtUtil.generateToken(request.getUserId(), roles);
+        return ResponseEntity.ok(jwtUtil.generateToken(request.getUserId(), roles));
     }
 }

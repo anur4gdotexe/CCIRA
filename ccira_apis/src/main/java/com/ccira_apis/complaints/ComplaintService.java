@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -108,7 +109,8 @@ public class ComplaintService {
                 .getPrincipal();
 
         return complaintAdminRepository.findByAdminId(adminId).stream()
-                .map(cam -> complaintRepository.findById(cam.getComplaintId()).get())
+                .map(cam -> complaintRepository.findById(cam.getComplaintId())
+                        .orElseThrow(() -> new NoSuchElementException("Complaint not found: " + cam.getComplaintId())))
                 .map(complaint -> {
                     complaint.setAdmin(getAdminByComplaintId(complaint.getComplaintId()));
                     return complaint;
@@ -123,7 +125,8 @@ public class ComplaintService {
                 .getPrincipal();
 
         return complaintUserRepository.findByUserId(userId).stream()
-                .map(cum -> complaintRepository.findById(cum.getComplaintId()).get())
+                .map(cum -> complaintRepository.findById(cum.getComplaintId())
+                        .orElseThrow(() -> new NoSuchElementException("Complaint not found: " + cum.getComplaintId())))
                 .map(complaint -> {
                     complaint.setAdmin(getAdminByComplaintId(complaint.getComplaintId()));
                     return complaint;
@@ -158,7 +161,12 @@ public class ComplaintService {
     }
 
     public String getAdminByComplaintId(String complaintId) {
-        String adminId = complaintAdminRepository.findByComplaintId(complaintId).get(0).getAdminId();
-        return adminBodyRepository.findById(adminId).get().getAdminName();
+        String adminId = complaintAdminRepository.findByComplaintId(complaintId)
+                .stream().findFirst()
+                .orElseThrow(() -> new NoSuchElementException("No admin mapping found for complaint: " + complaintId))
+                .getAdminId();
+        return adminBodyRepository.findById(adminId)
+                .orElseThrow(() -> new NoSuchElementException("Admin body not found: " + adminId))
+                .getAdminName();
     }
 }

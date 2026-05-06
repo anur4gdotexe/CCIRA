@@ -28,11 +28,22 @@ export const getLocation = async (lat, lon) => {
     }
 }
 
+const isRealImage = async (file) => {
+  const buffer = await file.slice(0, 4).arrayBuffer()
+  const bytes = new Uint8Array(buffer)
+  const isJpeg = bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF
+  const isPng  = bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47
+  const isWebp = bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46
+  return isJpeg || isPng || isWebp
+}
+
 export const uploadImageToCloudinary = async (file) => {
   if (!file.type.startsWith("image/")) throw new Error("Only image files are allowed")
 
   const MAX_SIZE = 5 * 1024 * 1024
   if (file.size > MAX_SIZE) throw new Error("File size exceeds 5MB limit")
+
+  if (!(await isRealImage(file))) throw new Error("File does not appear to be a valid image")
 
   const formData = new FormData()
   formData.append("file", file)

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import API from "../services/api";
 import LocationMap from "../components/LocationMap";
 import Navbar from "../components/Navbar";
@@ -20,6 +20,13 @@ export default function SubmitComplaint() {
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
   const [formError, setFormError] = useState("");
   const [formSuccess, setFormSuccess] = useState("");
+  const errorRef = useRef(null);
+
+  useEffect(() => {
+    if (formError && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [formError]);
 
   const setError = (message) => {
     setFormSuccess("");
@@ -79,6 +86,10 @@ export default function SubmitComplaint() {
       return;
     }
 
+    setFormError("");
+    setFormSuccess("");
+    setIsSubmitting(true);
+
     let category = "OTHER";
 
     try {
@@ -98,9 +109,16 @@ export default function SubmitComplaint() {
       console.error("AI error:", err);
     }
 
-    setFormError("");
-    setFormSuccess("");
-    setIsSubmitting(true);
+    let imageUrl = null;
+    if (image) {
+      try {
+        imageUrl = await uploadImageToCloudinary(image);
+      } catch (err) {
+        setError(err.message || "Image upload failed. Please check the file and try again.");
+        setIsSubmitting(false);
+        return;
+      }
+    }
 
     const payload = {
       description: description.trim(),
@@ -108,7 +126,7 @@ export default function SubmitComplaint() {
       lon: location.lon,
       state: state,
       district: district,
-      image: image ? await uploadImageToCloudinary(image) : null,
+      image: imageUrl,
       name,
       phone,
       category: category
@@ -154,7 +172,7 @@ export default function SubmitComplaint() {
             Share accurate details and location so the right department can resolve your issue faster.
           </p>
 
-          {formError && <p className="submit-alert submit-alert-error">{formError}</p>}
+          {formError && <p ref={errorRef} className="submit-alert submit-alert-error">{formError}</p>}
           {formSuccess && <p className="submit-alert submit-alert-success">{formSuccess}</p>}
 
           <div className="submit-grid">

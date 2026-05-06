@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -33,8 +34,9 @@ public class ComplaintController {
 
     @GetMapping("/public/{id}")
     ResponseEntity<Complaint> getComplaintById(@PathVariable("id") String id) {
-        return ResponseEntity.status(200)
-                .body(complaintRepository.findById(id).get());
+        Complaint complaint = complaintRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Complaint not found: " + id));
+        return ResponseEntity.ok(complaint);
     }
 
     @GetMapping("/admins")

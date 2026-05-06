@@ -56,7 +56,8 @@ def fuse_results(text, image_path=None):
         image_result = classify_image(image_path)
 
     raw_category = text_result["category"]
-    final_category = normalize_category(raw_category, text_result.get("keywords", []))
+    keywords = text_result.get("keywords", [])
+    final_category = normalize_category(raw_category, keywords)
 
     source = "text"
     confidence = 0.6
@@ -75,9 +76,20 @@ def fuse_results(text, image_path=None):
             final_category = "WATER"
         elif "road" in image_label:
             final_category = "ROAD"
+        else:
+            # Image was confident but label didn't map to anything useful —
+            # fall back to keyword-driven category from the description
+            final_category = normalize_category("other", keywords)
+            source = "text"
+            confidence = 0.6
 
-        source = "image"
-        confidence = image_result["confidence"]
+        if source != "text":
+            source = "image"
+            confidence = image_result["confidence"]
+
+    # Last resort: if we still have OTHER, try keywords one more time
+    if final_category == "OTHER" and keywords:
+        final_category = normalize_category("other", keywords)
 
     urgency = text_result["urgency"]
 
@@ -89,5 +101,5 @@ def fuse_results(text, image_path=None):
         "confidence": confidence,
         "urgency": urgency,
         "priority_score": priority,
-        "keywords": text_result["keywords"]
+        "keywords": keywords
     }
