@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
 
   const handleLogout = () => {
@@ -21,16 +22,17 @@ export default function Navbar() {
       </div>
 
       <div className="nav-links">
-        {(user?.role === "user") && (
+        {user?.role === "user" && location.pathname !== "/track" && (
           <Link to="/track">Track Complaint</Link>
         )}
-        {(user?.role === "user") && (
+        {user?.role === "user" && location.pathname !== "/submit" && (
           <Link to="/submit">Submit Complaint</Link>
         )}
-        
-        {(user?.role === "admin") && (
+
+        {user?.role === "admin" && location.pathname !== "/admin" && (
           <Link to="/admin">Admin Dashboard</Link>
         )}
+
         {isAuthenticated ? (
           <button type="button" onClick={handleLogout} className="nav-action-btn">
             Logout

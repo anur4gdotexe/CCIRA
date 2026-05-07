@@ -18,6 +18,9 @@ public class Complaint {
     @Field("category")
     private String category;
 
+    @Field("urgency")
+    private String urgency;
+
     @Field("img_src")
     private String imgSrc;
 
@@ -51,6 +54,9 @@ public class Complaint {
     public void setAdmin(String admin) {
         this.admin = admin;
     }
+
+    public String getUrgency() { return urgency; }
+    public void setUrgency(String urgency) { this.urgency = urgency; }
 
     public String getCategory() {
         return category;

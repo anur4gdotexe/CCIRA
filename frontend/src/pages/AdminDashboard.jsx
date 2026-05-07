@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import API from "../services/api";
 import Navbar from "../components/Navbar";
@@ -133,16 +133,27 @@ function StatusDropdown({ complaintId, currentStatus, onUpdate }) {
 
 export default function AdminDashboard() {
   const [complaints, setComplaints] = useState([]);
+  const [adminInfo, setAdminInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [updatingId, setUpdatingId] = useState(null);
+
+  // Filters & sort
+  const [filterStatus,   setFilterStatus]   = useState("ALL");
+  const [filterUrgency,  setFilterUrgency]  = useState("ALL");
+  const [filterCategory, setFilterCategory] = useState("ALL");
+  const [sortBy,         setSortBy]         = useState("newest");
 
   const fetchComplaints = useCallback(async () => {
     setIsLoading(true);
     setErrorMessage("");
     try {
-      const res = await API.get("/complaints/admins");
-      setComplaints(Array.isArray(res.data) ? res.data : []);
+      const [complaintsRes, adminRes] = await Promise.all([
+        API.get("/complaints/admins"),
+        API.get("/admins/me"),
+      ]);
+      setComplaints(Array.isArray(complaintsRes.data) ? complaintsRes.data : []);
+      setAdminInfo(adminRes.data);
     } catch (error) {
       console.error("Error fetching complaints", error);
       setErrorMessage(error.userMessage || "Unable to load submitted complaints.");
@@ -167,35 +178,117 @@ export default function AdminDashboard() {
     }
   };
 
+  const displayedComplaints = useMemo(() => {
+    let result = [...complaints];
+
+    if (filterStatus   !== "ALL") result = result.filter(c => c.status   === filterStatus);
+    if (filterUrgency  !== "ALL") result = result.filter(c => c.urgency  === filterUrgency);
+    if (filterCategory !== "ALL") result = result.filter(c => c.category === filterCategory);
+
+    result.sort((a, b) => {
+      if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+      if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
+      if (sortBy === "urgency") {
+        const order = { High: 0, Medium: 1, Low: 2 };
+        return (order[a.urgency] ?? 3) - (order[b.urgency] ?? 3);
+      }
+      return 0;
+    });
+
+    return result;
+  }, [complaints, filterStatus, filterUrgency, filterCategory, sortBy]);
+
   return (
     <>
       <Navbar />
 
       <main className="admin-page">
-        <section className="admin-shell">
-          <h2>Admin Dashboard</h2>
 
+        {/* ── Header card with toolbar ── */}
+        <section className="admin-header-card">
+          <p className="admin-header-label">Admin Dashboard</p>
+          {adminInfo && (
+            <>
+              <h2 className="admin-header-name">{adminInfo.adminName}</h2>
+              {(adminInfo.district || adminInfo.state) && (
+                <p className="admin-header-jurisdiction">
+                  {[adminInfo.district, adminInfo.state].filter(Boolean).join(", ")}
+                </p>
+              )}
+            </>
+          )}
+
+          <div className="admin-toolbar">
+            <div className="admin-select-wrap">
+              <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
+                <option value="ALL">All Statuses</option>
+                <option value="SUBMITTED">Submitted</option>
+                <option value="ACCEPTED">Accepted</option>
+                <option value="DECLINED">Declined</option>
+                <option value="RESOLVED">Resolved</option>
+              </select>
+            </div>
+
+            <div className="admin-select-wrap">
+              <select value={filterUrgency} onChange={e => setFilterUrgency(e.target.value)}>
+                <option value="ALL">All Urgencies</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+
+            <div className="admin-select-wrap">
+              <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
+                <option value="ALL">All Categories</option>
+                <option value="ROAD">Road</option>
+                <option value="WATER">Water</option>
+                <option value="WASTE">Waste</option>
+                <option value="SEWAGE">Sewage</option>
+              </select>
+            </div>
+
+            <div className="admin-select-wrap">
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="urgency">Urgency: High → Low</option>
+              </select>
+            </div>
+
+            <button type="button" onClick={fetchComplaints} disabled={isLoading}>
+              {isLoading ? "Refreshing..." : "Refresh"}
+            </button>
+          </div>
+        </section>
+
+        <section className="admin-shell">
           {errorMessage && <p className="admin-empty">{errorMessage}</p>}
           {!errorMessage && isLoading && <p className="admin-empty">Loading complaints...</p>}
           {!errorMessage && !isLoading && complaints.length === 0 && (
             <p className="admin-empty">No complaints available right now.</p>
           )}
+          {!errorMessage && !isLoading && complaints.length > 0 && displayedComplaints.length === 0 && (
+            <p className="admin-empty">No complaints match the selected filters.</p>
+          )}
 
-          {!errorMessage && !isLoading && complaints.length > 0 && (
+          {!errorMessage && !isLoading && displayedComplaints.length > 0 && (
             <div className="admin-list">
-              {complaints
-                .slice()
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .map((c) => (
+              {displayedComplaints.map((c) => (
                   <article
                     key={c.complaintId}
                     className={`admin-item ${updatingId === c.complaintId ? "admin-item--updating" : ""}`}
                   >
-                    {/* ── Header: ID + category + status ── */}
+                    {/* ── Header: ID + category + urgency + status ── */}
                     <div className="admin-item-header">
                       <div className="admin-item-meta">
                         <span className="admin-complaint-id">#{c.complaintId}</span>
                         {c.category && <span className="admin-category-tag">{c.category}</span>}
+                        {c.urgency && (
+                          <span className={`admin-urgency-tag admin-urgency-${c.urgency.toLowerCase()}`}>
+                            {c.urgency}
+                          </span>
+                        )}
                         <StatusDropdown
                           complaintId={c.complaintId}
                           currentStatus={c.status || "SUBMITTED"}

@@ -91,6 +91,7 @@ export default function SubmitComplaint() {
     setIsSubmitting(true);
 
     let category = "OTHER";
+    let urgency = "Low";
 
     try {
       const formData = new FormData();
@@ -104,6 +105,7 @@ export default function SubmitComplaint() {
 
       const aiData = await aiRes.json();
       category = aiData?.analysis?.category || "OTHER";
+      urgency = aiData?.analysis?.urgency || "Low";
 
     } catch (err) {
       console.error("AI error:", err);
@@ -129,7 +131,8 @@ export default function SubmitComplaint() {
       image: imageUrl,
       name,
       phone,
-      category: category
+      category: category,
+      urgency: urgency
     };
 
     try {

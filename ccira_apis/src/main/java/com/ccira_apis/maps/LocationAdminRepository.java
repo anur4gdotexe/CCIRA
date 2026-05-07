@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface LocationAdminRepository extends MongoRepository<LocationAdminMap, String> {
     List<LocationAdminMap> findByStateAndDistrict(String state, String district);
+    List<LocationAdminMap> findByAdminId(String adminId);
 }

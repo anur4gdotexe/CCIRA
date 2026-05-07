@@ -19,6 +19,8 @@ public class ComplaintSubmissionDTO {
 
     private String category;
 
+    private String urgency;
+
     //admin body
     private String state;
 
@@ -71,6 +73,9 @@ public class ComplaintSubmissionDTO {
     public String getName() {
         return name;
     }
+
+    public String getUrgency() { return urgency; }
+    public void setUrgency(String urgency) { this.urgency = urgency; }
 
     public String getCategory() {
         return category;

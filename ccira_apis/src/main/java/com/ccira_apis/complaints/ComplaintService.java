@@ -64,6 +64,7 @@ public class ComplaintService {
         newComplaint.setComplaintId(complaintId);
         newComplaint.setDescription(complaintSubmissionDTO.getDescription());
         newComplaint.setCategory(category);
+        newComplaint.setUrgency(complaintSubmissionDTO.getUrgency());
         newComplaint.setLat(complaintSubmissionDTO.getLat());
         newComplaint.setLon(complaintSubmissionDTO.getLon());
         newComplaint.setImgSrc(complaintSubmissionDTO.getImage());
