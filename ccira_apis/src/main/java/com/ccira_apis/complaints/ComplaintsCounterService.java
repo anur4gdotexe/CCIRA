@@ -1,25 +1,18 @@
 package com.ccira_apis.complaints;
 
+import com.ccira_apis.counter.CounterService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ComplaintsCounterService {
-    private final ComplaintsCounterRepository complaintsCounterRepository;
 
-    public ComplaintsCounterService (ComplaintsCounterRepository complaintsCounterRepository) {
-        this.complaintsCounterRepository = complaintsCounterRepository;
+    private final CounterService counterService;
+
+    public ComplaintsCounterService(CounterService counterService) {
+        this.counterService = counterService;
     }
 
     public String generateComplaintId() {
-        ComplaintsCounter complaintsCounter = complaintsCounterRepository
-                .findById("complaints_counter")
-                .orElseThrow(() -> new RuntimeException("counter not found"));
-
-        int count = complaintsCounter.getComplaintCount() + 1;
-
-        complaintsCounter.setComplaintCount(count);
-        complaintsCounterRepository.save(complaintsCounter);
-
-        return String.format("C%04d", count);
+        return counterService.generateId("complaints_counter", "C", 4);
     }
 }

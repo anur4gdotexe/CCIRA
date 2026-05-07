@@ -1,22 +1,13 @@
 package utils.auth;
 
 public class LoginDTO {
-    private String userId;
+    // Accepts either a userId (e.g. "U001") or an email address
+    private String identifier;
     private String password;
 
-    public String getUserId() {
-        return userId;
-    }
+    public String getIdentifier() { return identifier; }
+    public void setIdentifier(String identifier) { this.identifier = identifier; }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }

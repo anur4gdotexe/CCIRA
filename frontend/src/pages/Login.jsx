@@ -16,7 +16,7 @@ const Login = () => {
   const isAdminFlow = roleFromQuery === "admin";
   const redirectTo = location.state?.from || (isAdminFlow ? "/admin" : "/submit");
 
-  const [userId, setUserId] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,7 +30,7 @@ const Login = () => {
     try {
 
       const res = await API.post("/auth/login", {
-        userId,
+        identifier,
         password
       });
 
@@ -88,12 +88,12 @@ const Login = () => {
 
           <form onSubmit={handleLogin}>
 
-            <label>User ID</label>
+            <label>{isAdminFlow ? "Admin ID" : "User ID or Email"}</label>
 
             <input
-              type="userId"
-              placeholder="Enter User ID"
-              onChange={(e)=>setUserId(e.target.value)}
+              type="text"
+              placeholder={isAdminFlow ? "Enter Admin ID" : "Enter User ID or Email"}
+              onChange={(e) => setIdentifier(e.target.value)}
               required
             />
 

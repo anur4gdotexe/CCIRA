@@ -1,7 +1,22 @@
 node_modules/
-.env
 dist/
 build/
 logs/
 *.log
 .DS_Store
+
+# Environment & secrets
+.env
+*.env
+local.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+ai/venv/
+
+# Spring Boot config with secrets (mail credentials, jwt key)
+ccira_apis/src/main/resources/application.yaml

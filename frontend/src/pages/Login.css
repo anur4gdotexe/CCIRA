@@ -161,3 +161,65 @@
     font-size: 28px;
   }
 }
+
+/* ── Register: OTP & success steps ── */
+.auth-subtext {
+  font-size: 14px;
+  color: #5f584d;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.auth-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.auth-success h2 {
+  margin-bottom: 0;
+}
+
+.user-id-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(79, 125, 87, 0.1);
+  border: 1px solid rgba(79, 125, 87, 0.35);
+  border-radius: 12px;
+  padding: 14px 28px;
+  width: 100%;
+}
+
+.user-id-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4f7d57;
+}
+
+.user-id-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #2f5235;
+  letter-spacing: 0.06em;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #4f7d57;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
