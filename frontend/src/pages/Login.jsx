@@ -86,6 +86,10 @@ const Login = () => {
 
           {errorMessage && <p className="auth-error">{errorMessage}</p>}
 
+          {!errorMessage && location.state?.from && (
+            <p className="auth-notice">🔒 Please sign in to continue</p>
+          )}
+
           <form onSubmit={handleLogin}>
 
             <label>{isAdminFlow ? "Admin ID" : "User ID or Email"}</label>
